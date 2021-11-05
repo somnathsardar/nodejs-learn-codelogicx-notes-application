@@ -1,21 +1,20 @@
 const fs = require("fs");
 const chalk = require("chalk");
+const path = require('path');
 
 function addNote(fileName, data) {
   try {
-    //Reading data from the file
+    if(!fs.existsSync(fileName)){
+      fs.writeFileSync(fileName, JSON.stringify([]));
+    }
     var fileData = JSON.parse(fs.readFileSync(fileName));
-
-    //Pushing new data into the file.
     fileData.push(data);
-
-    //Writing the udpated data back into the file
-    fs.writeFileSync(fileName, fileData);
-
+    fs.writeFileSync(fileName, JSON.stringify(fileData));
     console.log(chalk.green("Adding new note was successful."));
     return fileData;
   } catch (error) {
     console.log(chalk.red("Adding new note was unsuccessful."));
+    console.log(chalk.red(error));
   }
 }
 
